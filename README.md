@@ -43,14 +43,3 @@ This project implements a full-stack autonomous AI agent that discovers product 
 - Enable fast, scalable alerting for valuable deals across categories.
 
 ---
-
-## 🧑‍💻 Author
-
-**Guo Hai**  
-GitHub: [@haiguo123](https://github.com/haiguo123)
-
----
-
-## 📝 License
-
-This project is released under the MIT License.
