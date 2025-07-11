@@ -22,10 +22,10 @@ This project builds an autonomous agent-based system that scrapes product deals,
 
 3. **Web Crawling & Deal Collection**  
    - Automated pipelines collect real-time RSS deal data from sources like DealNews.
-   - Parsed HTML product listings using `requests` and `BeautifulSoup`, covering electronics, home goods, automotive, and more.
+   - Parsed HTML product listings with descriptions and prices, covering electronics, home goods, automotive, and more.
 
 4. **Agentic Price Gap Detection**  
-   - Compares real-time deal prices to model estimates and flags deals where the market price is **significantly lower** than predicted.
+   - Compares real-time deal prices to model estimates and flags deals where the market price is significantly lower than predicted.
 
 5. **Real-Time Notifications & Alerts**  
    - Integrated Pushover to push price alerts for underpriced deals.
