@@ -25,7 +25,6 @@ This project builds an autonomous agent-based system that scrapes product deals,
    - Parsed HTML product listings using `requests` and `BeautifulSoup`, covering electronics, home goods, automotive, and more.
 
 4. **Agentic Price Gap Detection**  
-   - Developed an LLM-powered agent framework that retrieves semantically similar products from a Chroma vector store.
    - Compares real-time deal prices to model estimates and flags deals where the market price is **significantly lower** than predicted.
 
 5. **Real-Time Notifications & Alerts**  
@@ -36,39 +35,3 @@ This project builds an autonomous agent-based system that scrapes product deals,
    - Built a Gradio-based interface for users to input descriptions and see estimated price vs. deal price difference.
 
 ---
-
-## 🛠 Tech Stack
-
-- **Models**: OpenAI GPT-4o-mini, DeepSeek, SentenceTransformers, QLoRA
-- **Retrieval**: ChromaDB for semantic similarity search
-- **Scraping**: RSS feeds + BeautifulSoup + requests
-- **UI**: Gradio frontend for interactive demos
-- **Notifications**: Pushover API for deal alerts
-- **Hosting**: Modal for deployment, scikit-learn for linear regression
-
----
-
-## 📦 Folder Highlights
-
-```
-project/
-├── agents/                  # Agent classes like FrontierAgent
-├── items.py                 # Item representation for pricing
-├── deal_agent_framework.py # Main orchestration logic
-├── memory.json              # Historical opportunity memory
-├── requirements.txt
-└── README.md
-```
-
----
-
-## 🧑‍💻 Author
-
-**Guo Hai**  
-GitHub: [@haiguo123](https://github.com/haiguo123)
-
----
-
-## 📝 License
-
-This project is released under the MIT License.
