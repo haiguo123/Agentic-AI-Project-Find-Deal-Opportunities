@@ -32,6 +32,6 @@ This project builds an autonomous agent-based system that scrapes product deals,
    - Only alerts for products where the price gap exceeds a predefined margin (e.g., >20% below model price).
 
 6. **Gradio UI for Live Interaction**  
-   - Built a Gradio-based interface for users to input descriptions and see estimated price vs. deal price difference.
+   - Built a Gradio-based interface for users to look up real-time profitable deals with deal description, actual price, estimate price and discount.
 
 ---
