@@ -8,8 +8,6 @@ This project builds an autonomous agent-based system that scrapes product deals,
 
 ---
 
-## 📌 Key Features
-
 ## 1. Data Curation
 
 This repository contains a lightweight data-curation pipeline that
