@@ -12,8 +12,94 @@ This project builds an autonomous agent-based system that scrapes product deals,
 
 ## 📌 Key Features
 
-1. **Large-Scale Product Dataset Curation**  
-   - Curated a dataset of 400,000 product records from Amazon, accessed via Hugging Face.
+# 1. Data Curation for Price-Prediction Prompts
+
+This repository contains a lightweight data-curation pipeline that
+converts Amazon product metadata into high-quality, fixed-length
+training examples for training a model to predict product prices from
+text.
+
+The pipeline consists of two main components:
+
+-   Item: Cleans and compacts a single product datapoint into a
+    prompt--answer pair.
+-   Loader: Loads a HuggingFace dataset split, filters datapoints by
+    price, and processes them in parallel to produce curated Item
+    objects.
+    
+---
+
+## Overview
+
+For each product datapoint, the pipeline performs the following steps:
+
+1.  Assemble product text from multiple fields:
+    -   title
+    -   description (list of strings)
+    -   features (list of strings)
+    -   details (string, additionally cleaned with rule-based removals)
+2.  Scrub noise from the text:
+    -   Remove punctuation and formatting artifacts
+    -   Normalize whitespace and stray commas
+    -   Drop product-number-like tokens (long tokens containing digits)
+3.  Length control:
+    -   Enforce a minimum amount of text (MIN_CHARS)
+    -   Cap raw characters (CEILING_CHARS)
+    -   Tokenize using the base tokenizer (e.g., Llama 3.1 8B)
+    -   Require enough tokens to be useful (MIN_TOKENS)
+    -   Truncate to a consistent maximum (MAX_TOKENS)
+4.  Prompt construction:
+    -   Prepend a natural-language question
+    -   Append the rounded price as the training target
+
+---
+
+## Prompt Format
+
+Each curated sample uses the following template:
+
+``` text
+How much does this cost to the nearest dollar?
+
+<TITLE>
+<CLEANED PRODUCT TEXT>
+
+Price is $<rounded_price>.00
+```
+
+The target price is rounded to the nearest dollar to reduce label noise
+and stabilize training.
+
+---
+
+## Key Parameters
+
+-   MIN_PRICE, MAX_PRICE: Filter unrealistic or out-of-range prices
+    (default: 0.5 to 999.49)
+-   MIN_CHARS: Minimum raw text length before tokenization (default:
+    300)
+-   MIN_TOKENS: Minimum tokens required after tokenization (default:
+    150)
+-   MAX_TOKENS: Maximum tokens retained for the product text (default:
+    160)
+-   CEILING_CHARS: Pre-tokenization character cap (MAX_TOKENS \* 7)
+
+------------------------------------------------------------------------
+
+## Parallel Processing
+
+ItemLoader processes dataset chunks in parallel using
+ProcessPoolExecutor:
+
+-   Iterates over the dataset in fixed-size chunks (CHUNK_SIZE)
+-   Converts each valid datapoint into an Item
+-   Keeps only samples with include = True
+-   Assigns the loader name as category for downstream analysis
+-   Displays progress using tqdm
+
+This significantly speeds up preprocessing on large datasets.
+
+---
 
 2. **Hybrid Price Prediction Engine**  
    - Combined RAG (SentenceTransformer + custom FrontierAgent) and fine-tuned QLoRA models to estimate product prices from natural language descriptions.
