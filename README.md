@@ -2,9 +2,7 @@
 
 This project builds an autonomous agent-based system that scrapes product deals, estimates expected prices using LLMs and regression models, and automatically identifies **underpriced products**—those whose actual deal prices fall below the model’s predictions—for potential profit opportunities.
 
----
-
-## 🎯 Project Goal
+# 🎯 Project Goal
 
 > **Automatically detect and return products priced significantly below model-estimated fair value**, enabling users to spot deals with strong profit potential.
 
@@ -12,7 +10,7 @@ This project builds an autonomous agent-based system that scrapes product deals,
 
 ## 📌 Key Features
 
-# 1. Data Curation for Price-Prediction Prompts
+## 1. Data Curation for Price-Prediction Prompts
 
 This repository contains a lightweight data-curation pipeline that
 converts Amazon product metadata into high-quality, fixed-length
@@ -26,8 +24,6 @@ The pipeline consists of two main components:
 -   Loader: Loads a HuggingFace dataset split, filters datapoints by
     price, and processes them in parallel to produce curated Item
     objects.
-    
----
 
 ## Overview
 
@@ -52,8 +48,6 @@ For each product datapoint, the pipeline performs the following steps:
     -   Prepend a natural-language question
     -   Append the rounded price as the training target
 
----
-
 ## Prompt Format
 
 Each curated sample uses the following template:
@@ -70,8 +64,6 @@ Price is $<rounded_price>.00
 The target price is rounded to the nearest dollar to reduce label noise
 and stabilize training.
 
----
-
 ## Key Parameters
 
 -   MIN_PRICE, MAX_PRICE: Filter unrealistic or out-of-range prices
@@ -83,8 +75,6 @@ and stabilize training.
 -   MAX_TOKENS: Maximum tokens retained for the product text (default:
     160)
 -   CEILING_CHARS: Pre-tokenization character cap (MAX_TOKENS \* 7)
-
-------------------------------------------------------------------------
 
 ## Parallel Processing
 
