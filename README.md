@@ -219,6 +219,7 @@ Title: <title>
 Details: <details>
 Features: <features>
 URL: <url>
+```
 
 ---
 
