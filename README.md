@@ -159,8 +159,66 @@ Return:
 ---
 
 ## 3. **Web Crawling & Deal Collection**  
-   - Automated pipelines collect real-time RSS deal data from sources like DealNews.
-   - Parsed HTML product listings with descriptions and prices, covering electronics, home goods, automotive, and more.
+
+This module implements an automated **web scraping and RSS-based deal collection pipeline** that continuously gathers real-time product deals from public deal aggregation websites (e.g., DealNews). The collected deals serve as the upstream data source for downstream price estimation, underpricing detection, and agent-based decision making.
+
+### 📡 Data Sources
+
+The system currently monitors multiple DealNews RSS feeds across categories:
+
+- Electronics  
+- Computers  
+- Automotive  
+- Smart Home  
+- Home & Garden  
+
+Each RSS feed provides structured metadata (title, summary, URL), which is enriched by crawling the full product detail page.
+
+### 🧩 Scraping Pipeline Overview
+
+For each RSS feed entry, the pipeline performs the following steps:
+
+1. **RSS Parsing**
+   - Uses `feedparser` to fetch and parse RSS feeds.
+   - Iterates over the latest deal entries (top N per category).
+
+2. **HTML Content Extraction**
+   - Fetches the full deal page using `requests`.
+   - Parses HTML with `BeautifulSoup`.
+   - Extracts:
+     - Product title  
+     - Cleaned summary  
+     - Detailed description  
+     - Feature list (if available)  
+
+3. **Text Cleaning & Normalization**
+   - Removes HTML tags and formatting artifacts.
+   - Normalizes whitespace and line breaks.
+   - Splits product content into:
+     - `details`  
+     - `features` (if present)  
+
+4. **Rate Limiting & Politeness**
+   - Adds a fixed delay between requests to avoid overloading source websites.
+   - Limits scraping to a small number of recent entries per feed.
+
+### 🏗️ Core Data Structures
+
+Represents a deal crawled from RSS + HTML:
+
+- `title`: Product title  
+- `summary`: Cleaned RSS summary  
+- `url`: Deal URL  
+- `details`: Full textual product description  
+- `features`: Parsed feature list (if available)  
+
+Each `ScrapedDeal` instance exposes a unified natural language representation via:
+
+```text
+Title: <title>
+Details: <details>
+Features: <features>
+URL: <url>
 
 ---
 
