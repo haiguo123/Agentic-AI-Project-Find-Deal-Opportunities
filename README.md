@@ -223,14 +223,82 @@ URL: <url>
 
 ---
 
-## 4. **Agentic Price Gap Detection**  
-   - Compares real-time deal prices to model estimates and flags deals where the market price is significantly lower than predicted.
+## 4. **Real-Time Notifications & Alerts**  
 
----
+This module implements a **real-time alerting and notification system** that delivers underpricing opportunities directly to users via mobile notifications. Once the agentic pipeline identifies a deal whose market price is significantly below the model-estimated fair value, the Messaging Agent pushes actionable alerts so users can react immediately.
 
-## 5. **Real-Time Notifications & Alerts**  
-   - Integrated Pushover to push price alerts for underpriced deals.
-   - Only alerts for products where the price gap exceeds a predefined margin (e.g., >20% below model price).
+### 🔔 Supported Notification Channels
+
+The system supports two notification backends, configurable via runtime flags:
+
+- **Pushover Push Notifications (default)**
+  - Instant push alerts to mobile devices  
+  - Lightweight HTTPS API integration  
+
+- **Twilio SMS (optional)**
+  - SMS alerts as a fallback or alternative channel  
+
+```python
+DO_TEXT = False   # Enable Twilio SMS
+DO_PUSH = True    # Enable Pushover push notifications
+```
+
+### 🔐 Configuration & Credentials
+
+All credentials are provided via environment variables for security and portability.
+
+**Pushover**
+- `PUSHOVER_USER`
+- `PUSHOVER_TOKEN`
+
+**Twilio (optional)**
+- `TWILIO_ACCOUNT_SID`
+- `TWILIO_AUTH_TOKEN`
+- `TWILIO_FROM`
+- `MY_PHONE_NUMBER`
+
+### 🧠 Messaging Agent Responsibilities
+
+The `MessagingAgent` is responsible for:
+
+- Initializing notification backends  
+- Formatting alert messages with price, estimate, and discount  
+- Dispatching alerts when profitable opportunities are detected  
+- Logging delivery events for observability  
+
+### 🧾 Alert Message Format
+
+Each alert contains concise, actionable information:
+
+```text
+Deal Alert!
+Price = $<actual_price>
+Estimate = $<model_estimate>
+Discount = $<price_gap>
+<Product short description>...
+<Deal URL>
+```
+
+### 🔄 End-to-End Alert Flow
+
+```text
+Underpriced Deal Detected
+            ↓
+   Opportunity Object Created
+            ↓
+      MessagingAgent.alert()
+            ↓
+  Push Notification / SMS Sent
+            ↓
+      User Receives Alert
+```
+
+### 🚀 Future Extensions
+
+- User preference profiles (category filters, thresholds)  
+- Alert deduplication and rate limiting  
+- Additional channels (Slack, Email, Telegram)  
+- Rich notifications with images or structured cards  
 
 ---
 
