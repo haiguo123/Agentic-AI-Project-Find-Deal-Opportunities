@@ -23,7 +23,7 @@ The pipeline consists of two main components:
     price, and processes them in parallel to produce curated Item
     objects.
 
-## Overview
+### Overview
 
 For each product datapoint, the pipeline performs the following steps:
 
@@ -46,7 +46,7 @@ For each product datapoint, the pipeline performs the following steps:
     -   Prepend a natural-language question
     -   Append the rounded price as the training target
 
-## Prompt Format
+### Prompt Format
 
 Each curated sample uses the following template:
 
@@ -62,7 +62,7 @@ Price is $<rounded_price>.00
 The target price is rounded to the nearest dollar to reduce label noise
 and stabilize training.
 
-## Key Parameters
+### Key Parameters
 
 -   MIN_PRICE, MAX_PRICE: Filter unrealistic or out-of-range prices
     (default: 0.5 to 999.49)
@@ -74,7 +74,7 @@ and stabilize training.
     160)
 -   CEILING_CHARS: Pre-tokenization character cap (MAX_TOKENS \* 7)
 
-## Parallel Processing
+### Parallel Processing
 
 ItemLoader processes dataset chunks in parallel using
 ProcessPoolExecutor:
