@@ -89,10 +89,72 @@ This significantly speeds up preprocessing on large datasets.
 
 ---
 
-2. **Hybrid Price Prediction Engine**  
+## 2. **Hybrid Price Prediction Engine** 
+
+### Overview
    - Combined RAG (SentenceTransformer + custom FrontierAgent) and fine-tuned QLoRA models to estimate product prices from natural language descriptions.
    - Used Linear Regression as a baseline estimator.
    - Achieved ~70% accuracy within a tolerance range by comparing methods.
+
+### RAG
+
+The RAG pipeline consists of four main stages:
+
+1. **Document Ingestion & Indexing**
+   - Sources:
+     - Historical product listings and prices  
+     - Product specifications and descriptions  
+     - Category-level statistics (e.g., average prices, distributions)  
+     - User-curated deal datasets (optional)  
+   - Processing:
+     - Chunk long documents into fixed-size passages  
+     - Clean and normalize text (similar rules as data curation)  
+     - Embed each chunk using a sentence embedding model  
+   - Storage:
+     - Persist embeddings in a vector database (e.g., FAISS / Chroma / Milvus)
+
+2. **Query Construction**
+   - For each candidate deal, construct a structured query from:
+     - Product title  
+     - Cleaned description + features  
+     - Optional category or brand hints  
+   - The query is embedded using the same encoder as the index.
+
+3. **Retrieval**
+   - Perform top-*k* nearest-neighbor search over the vector store  
+   - Retrieve semantically similar products, historical comparables, and pricing references  
+   - Optionally apply:
+     - Category filters  
+     - Recency weighting  
+     - Price-range constraints  
+
+4. **Augmented Generation**
+   - The retrieved context is injected into the LLM prompt alongside the product text  
+   - The LLM produces:
+     - An estimated fair price  
+     - A confidence score or uncertainty band (optional)  
+     - A brief natural-language rationale referencing retrieved evidence
+       
+### 🧾 Prompt Template (RAG-Augmented)
+
+```text
+You are a pricing expert. Given the product below and reference examples of similar products with known prices, estimate the fair market price.
+
+[Product]
+<TITLE>
+<CLEANED PRODUCT TEXT>
+
+[Retrieved Comparables]
+<CHUNK 1>
+<CHUNK 2>
+...
+<CHUNK K>
+
+Return:
+- Estimated fair price (USD, rounded to nearest dollar)
+- Brief justification citing the comparables
+
+---
 
 3. **Web Crawling & Deal Collection**  
    - Automated pipelines collect real-time RSS deal data from sources like DealNews.
