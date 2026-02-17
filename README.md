@@ -304,5 +304,3 @@ Underpriced Deal Detected
 
 ## 5. **Gradio UI for Live Interaction**  
    - Built a Gradio-based interface for users to look up real-time profitable deals with deal description, actual price, estimate price and discount.
-
----
